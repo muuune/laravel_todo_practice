@@ -8,7 +8,6 @@ Route::get('/', function () {
 
 use App\Http\Controllers\Home\MyTaskController;
 
-Route::get('/test', [App\Http\Controllers\Controller::class, 'test_test']);
 Route::get('/mytask', [MyTaskController::class, 'show'])
 ->name('mytask.show');
 
