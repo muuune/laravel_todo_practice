@@ -6,12 +6,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+use App\Http\Controllers\Home\MyTaskController;
+
 Route::get('/test', [App\Http\Controllers\Controller::class, 'test_test']);
-Route::get('/mytask', [App\Http\Controllers\Home\MyTaskController::class, 'show'])
+Route::get('/mytask', [MyTaskController::class, 'show'])
 ->name('mytask.show');
 
-Route::post('/mytask/create', [App\Http\Controllers\Home\MyTaskController::class, 'create'])
+Route::post('/mytask/create', [MyTaskController::class, 'create'])
 ->name('mytask.create');
 
-Route::post('/mytask/destroy', [App\Http\Controllers\Home\MyTaskController::class, 'destroy'])
+Route::post('/mytask/destroy', [MyTaskController::class, 'destroy'])
 ->name('mytask.destroy');
+
+Route::get('/mytask/{id}/edit', [MyTaskController::class, 'edit'])
+->name('mytask.edit');
+
+Route::post('/mytask/{id}/update', [MyTaskController::class, 'update'])
+->name('mytask.update');

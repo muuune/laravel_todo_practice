@@ -17,7 +17,11 @@
             <ul>
                 @foreach ($tasks as $task)
                     <li>{{ $task->title }}</li>
-                    <form action="{{ route('mytask.destroy', ['id'=>$task->id]) }}" method="post">
+                    <form action="{{ route('mytask.edit', ['id' => $task->id]) }}" method="get">
+                        @csrf
+                        <button type="submit">編集</button>
+                    </form> 
+                    <form action="{{ route('mytask.destroy', ['id' => $task->id]) }}" method="post">
                         @csrf
                         <button type="submit">削除</button>
                     </form> 

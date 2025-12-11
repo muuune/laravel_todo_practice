@@ -8,7 +8,6 @@ use App\Models\Task;
 
 class MyTaskController extends Controller
 {
-    //
     public function show()
     {
         $tasks = Task::all();
@@ -36,4 +35,25 @@ class MyTaskController extends Controller
 
         return redirect()->route('mytask.show');
     } 
+
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        return view('edit-mytask')->with('task', $task);
+    }
+    
+    public function update(Request $request, $id)
+    {  
+        $rules = [
+        'title' => 'required|string|max:255',
+        ];
+
+        $request->validate($rules);
+
+        $task = Task::findOrFail($id);
+        $task->title = $request->title;
+        $task->save();
+
+        return redirect()->route('mytask.show');
+    }
 }
