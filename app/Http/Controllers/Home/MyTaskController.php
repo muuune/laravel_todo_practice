@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\MyTaskPostRequest;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Task;
 
 class MyTaskController extends Controller
@@ -14,16 +15,14 @@ class MyTaskController extends Controller
         return view('mytask')->with('tasks' , $tasks);
     }
 
-    public function create(Request $request)
+    public function create(MyTaskPostRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required|string|max:255',
-        ];
-
-        $request->validate($rules);
+        // 受信リクエストは正しかった
+        // バリデーション済みデータの取得
+        $validated = $request->validated();
 
         $task = new Task();
-        $task->title = $request->title;
+        $task->title = $validated['title'];
         $task->save();
 
         return redirect()->route('mytask.show');
@@ -42,16 +41,14 @@ class MyTaskController extends Controller
         return view('edit-mytask')->with('task', $task);
     }
     
-    public function update(Request $request, $id)
+    public function update(MyTaskPostRequest $request, $id): RedirectResponse
     {  
-        $rules = [
-        'title' => 'required|string|max:255',
-        ];
-
-        $request->validate($rules);
+        // 受信リクエストは正しかった
+        // バリデーション済みデータの取得
+        $validated = $request->validated();
 
         $task = Task::findOrFail($id);
-        $task->title = $request->title;
+        $task->title = $validated['title'];
         $task->save();
 
         return redirect()->route('mytask.show');
