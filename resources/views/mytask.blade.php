@@ -13,6 +13,13 @@
     </head>
     <body class="antialiased">
         <h1>タスクアプリ</h1>
+        <form action="{{ route('mytask.show') }}" method="get">
+            <select name="filter_status" onChange="this.form.submit()">
+                <option value="">全て</option>
+                <option value="0" {{ request('filter_status') === '0' ? 'selected' : '' }}>未完了</option>
+                <option value="1" {{ request('filter_status') === '1' ? 'selected' : '' }}>完了</option>
+            </select>
+        </form>
         <div>
             <ul>
                 @foreach ($tasks as $task)

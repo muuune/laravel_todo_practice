@@ -10,10 +10,18 @@ use App\Models\Task;
 
 class MyTaskController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $tasks = Task::all();
-        return view('mytask')->with('tasks' , $tasks);
+        $query = Task::query();
+
+        // 絞り込み（filter_statusが送られてきた場合）
+        if ($request->filled('filter_status')) {
+            $query->where('status', $request->filter_status);
+        }
+
+        $tasks = $query->get();
+
+        return view('mytask')->with('tasks', $tasks);
     }
 
     public function create(MyTaskPostRequest $request): RedirectResponse
