@@ -22,3 +22,6 @@ Route::get('/mytask/{id}/edit', [MyTaskController::class, 'edit'])
 
 Route::post('/mytask/{id}/update', [MyTaskController::class, 'update'])
 ->name('mytask.update');
+
+Route::post('/mytask/{id}/status', [MyTaskController::class, 'updateStatus'])
+->name('mytask.updateStatus');

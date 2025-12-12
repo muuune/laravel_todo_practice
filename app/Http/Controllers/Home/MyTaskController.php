@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\MyTaskPostRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Task;
@@ -49,6 +50,16 @@ class MyTaskController extends Controller
 
         $task = Task::findOrFail($id);
         $task->title = $validated['title'];
+        $task->save();
+
+        return redirect()->route('mytask.show');
+    }
+
+    public function updateStatus($id)
+    {
+        $task = Task::findOrFail($id);
+        // 現在のstatusを反転させる
+        $task->status = !$task->status;
         $task->save();
 
         return redirect()->route('mytask.show');
