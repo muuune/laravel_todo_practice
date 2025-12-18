@@ -24,6 +24,24 @@ class MyTaskController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
+        // 並び順の指定
+        if ($request->filled('sort')) {
+            switch ($request->input('sort')) {
+                case 'title_asc':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'title_desc':
+                    $query->orderBy('title', 'desc');
+                    break;
+                case 'newest':
+                    $query->orderBy('id', 'desc');
+                    break;
+                case 'oldest':
+                    $query->orderBy('id', 'asc');
+                    break;
+            }
+        }
+
         $tasks = $query->get();
 
         return view('mytask')->with('tasks', $tasks);

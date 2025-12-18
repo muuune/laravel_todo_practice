@@ -23,6 +23,16 @@
                 <input type="text" name="search" placeholder="タスク名で検索" value="{{ request('search') }}" />
                 <button type="submit">検索</button>
             </div>
+            <div>
+                <label>並び替え: </label>
+                <select name="sort" onchange="this.form.submit()">
+                    <option value="">-- 並び替え選択 --</option>
+                    <option value="title_asc" {{ request('sort') === 'title_asc' ? 'selected' : '' }}>タスク名昇順(A→Z)</option>
+                    <option value="title_desc" {{ request('sort') === 'title_desc' ? 'selected' : '' }}>タスク名降順(Z→A)</option>
+                    <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>登録順（新→古）</option>
+                    <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>登録順（古→新）</option>
+                </select>
+            </div>
         </form>
         <div>
             <ul>
