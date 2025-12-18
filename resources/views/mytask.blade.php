@@ -19,6 +19,10 @@
                 <option value="0" {{ request('filter_status') === '0' ? 'selected' : '' }}>未完了</option>
                 <option value="1" {{ request('filter_status') === '1' ? 'selected' : '' }}>完了</option>
             </select>
+            <div>
+                <input type="text" name="search" placeholder="タスク名で検索" value="{{ request('search') }}" />
+                <button type="submit">検索</button>
+            </div>
         </form>
         <div>
             <ul>

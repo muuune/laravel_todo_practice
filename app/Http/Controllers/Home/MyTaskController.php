@@ -19,6 +19,11 @@ class MyTaskController extends Controller
             $query->where('status', $request->filter_status);
         }
 
+        // 検索キーワードが入力された場合
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
         $tasks = $query->get();
 
         return view('mytask')->with('tasks', $tasks);
