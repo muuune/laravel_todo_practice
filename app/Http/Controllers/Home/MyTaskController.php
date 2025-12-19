@@ -7,15 +7,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests\MyTaskPostRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Task;
+use App\Models\User;
 
 class MyTaskController extends Controller
 {
     public function show(Request $request)
     {
         // TODO: ログイン機能を実装した後に変更する
-        $userId = 1; // 仮のユーザーID
-
-        $query = Task::query()->where('user_id', $userId);
+        $user = User::findOrFail(1);
+        $query = $user->tasks(); 
 
         // 絞り込み（filter_statusが送られてきた場合）
         if ($request->filled('filter_status')) {
@@ -57,12 +57,11 @@ class MyTaskController extends Controller
         $validated = $request->validated();
 
         // TODO: ログイン機能を実装した後に変更する
-        $userId = 1; // 仮のユーザーID
+        $user = User::findOrFail(1);
 
-        $task = new Task();
-        $task->title = $validated['title'];
-        $task->user_id = $userId;
-        $task->save();
+        $user->tasks()->create([
+            'title' => $validated['title'],
+        ]);
 
         return redirect()->route('mytask.show');
     }
@@ -70,11 +69,9 @@ class MyTaskController extends Controller
     public function destroy(Request $request)
     {
         // TODO: ログイン機能を実装した後に変更する
-        $userId = 1; // 仮のユーザーID
+        $user = User::findOrFail(1);
 
-        Task::where('id', $request->id)
-            ->where('user_id', $userId)
-            ->delete();
+        $user->tasks()->where('id', $request->id)->delete();
 
         return redirect()->route('mytask.show');
     } 
@@ -82,11 +79,10 @@ class MyTaskController extends Controller
     public function edit($id)
     {
         // TODO: ログイン機能を実装した後に変更する
-        $userId = 1; // 仮のユーザーID
+        $user = User::findOrFail(1);
 
-        $task = Task::where('id', $id)
-            ->where('user_id', $userId)
-            ->firstOrFail();
+        $task = $user->tasks()->where('id', $id)->firstOrFail();
+
         return view('edit-mytask')->with('task', $task);
     }
     
@@ -97,26 +93,21 @@ class MyTaskController extends Controller
         $validated = $request->validated();
 
         // TODO: ログイン機能を実装した後に変更する
-        $userId = 1; // 仮のユーザーID
+        $user = User::findOrFail(1);
 
-        $task = Task::where('id', $id)
-            ->where('user_id', $userId)
-            ->firstOrFail();
-        $task->title = $validated['title'];
-        $task->save();
+        $user->tasks()
+            ->where('id', $id)
+            ->update(['title' => $validated['title']]);
 
         return redirect()->route('mytask.show');
     }
 
     public function updateStatus($id)
     {
-        // TODO: ログイン機能は後ほど実装
-        $userId = 1; // 仮のユーザーID
+        // TODO: ログイン機能を実装した後に変更する
+        $user = User::findOrFail(1);
 
-        $task = Task::where('id', $id)
-            ->where('user_id', $userId)
-            ->firstOrFail();
-        // 現在のstatusを反転させる
+        $task = $user->tasks()->findOrFail($id);
         $task->status = !$task->status;
         $task->save();
 
