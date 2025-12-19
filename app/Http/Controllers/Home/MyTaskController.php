@@ -12,7 +12,10 @@ class MyTaskController extends Controller
 {
     public function show(Request $request)
     {
-        $query = Task::query();
+        // TODO: ログイン機能を実装した後に変更する
+        $userId = 1; // 仮のユーザーID
+
+        $query = Task::query()->where('user_id', $userId);
 
         // 絞り込み（filter_statusが送られてきた場合）
         if ($request->filled('filter_status')) {
@@ -53,8 +56,12 @@ class MyTaskController extends Controller
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
+        // TODO: ログイン機能を実装した後に変更する
+        $userId = 1; // 仮のユーザーID
+
         $task = new Task();
         $task->title = $validated['title'];
+        $task->user_id = $userId;
         $task->save();
 
         return redirect()->route('mytask.show');
@@ -62,14 +69,24 @@ class MyTaskController extends Controller
 
     public function destroy(Request $request)
     {
-        Task::where('id', $request->id)->delete();
+        // TODO: ログイン機能を実装した後に変更する
+        $userId = 1; // 仮のユーザーID
+
+        Task::where('id', $request->id)
+            ->where('user_id', $userId)
+            ->delete();
 
         return redirect()->route('mytask.show');
     } 
 
     public function edit($id)
     {
-        $task = Task::findOrFail($id);
+        // TODO: ログイン機能を実装した後に変更する
+        $userId = 1; // 仮のユーザーID
+
+        $task = Task::where('id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
         return view('edit-mytask')->with('task', $task);
     }
     
@@ -79,7 +96,12 @@ class MyTaskController extends Controller
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        $task = Task::findOrFail($id);
+        // TODO: ログイン機能を実装した後に変更する
+        $userId = 1; // 仮のユーザーID
+
+        $task = Task::where('id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
         $task->title = $validated['title'];
         $task->save();
 
@@ -88,7 +110,12 @@ class MyTaskController extends Controller
 
     public function updateStatus($id)
     {
-        $task = Task::findOrFail($id);
+        // TODO: ログイン機能は後ほど実装
+        $userId = 1; // 仮のユーザーID
+
+        $task = Task::where('id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
         // 現在のstatusを反転させる
         $task->status = !$task->status;
         $task->save();
