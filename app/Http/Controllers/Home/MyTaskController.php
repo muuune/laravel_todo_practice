@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\MyTaskPostRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Task;
-use App\Models\User;
 
 class MyTaskController extends Controller
 {
     public function show(Request $request)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
         $query = $user->tasks(); 
 
         // 絞り込み（filter_statusが送られてきた場合）
@@ -56,8 +54,7 @@ class MyTaskController extends Controller
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $user->tasks()->create([
             'title' => $validated['title'],
@@ -68,8 +65,7 @@ class MyTaskController extends Controller
 
     public function destroy(Request $request)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $user->tasks()->where('id', $request->id)->delete();
 
@@ -78,8 +74,7 @@ class MyTaskController extends Controller
 
     public function edit($id)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $task = $user->tasks()->where('id', $id)->firstOrFail();
 
@@ -92,8 +87,7 @@ class MyTaskController extends Controller
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $user->tasks()
             ->where('id', $id)
@@ -104,8 +98,7 @@ class MyTaskController extends Controller
 
     public function updateStatus($id)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $task = $user->tasks()->findOrFail($id);
         $task->status = !$task->status;
