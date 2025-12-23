@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>タスク編集</title>
+    <title>タスク編集 - {{ config('app.name', 'Laravel') }}</title>
 </head>
 <body>
     <h1>タスク編集</h1>
