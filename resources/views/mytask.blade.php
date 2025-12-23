@@ -12,7 +12,18 @@
 
     </head>
     <body class="antialiased">
-        <h1>タスクアプリ</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>タスクアプリ</h1>
+            <div>
+                @auth
+                    <span>{{ auth()->user()->name }} さん</span>
+                    <form action="{{ route('logout') }}" method="post" style="display: inline;">
+                        @csrf
+                        <button type="submit">ログアウト</button>
+                    </form>
+                @endauth
+            </div>
+        </div>
         <form action="{{ route('mytask.show') }}" method="get">
             <select name="filter_status" onChange="this.form.submit()">
                 <option value="">全て</option>
