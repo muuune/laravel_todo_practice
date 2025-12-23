@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
