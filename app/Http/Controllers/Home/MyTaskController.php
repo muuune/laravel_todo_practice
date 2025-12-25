@@ -72,37 +72,41 @@ class MyTaskController extends Controller
         return redirect()->route('mytask.show');
     } 
 
-    public function edit($id)
+    public function edit(Task $id)
     {
-        $user = auth()->user();
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($id->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
 
-        $task = $user->tasks()->where('id', $id)->firstOrFail();
-
-        return view('edit-mytask')->with('task', $task);
+        return view('edit-mytask')->with('task', $id);
     }
     
-    public function update(MyTaskPostRequest $request, $id): RedirectResponse
+    public function update(MyTaskPostRequest $request, Task $id): RedirectResponse
     {  
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($id->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
+
         // 受信リクエストは正しかった
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        $user = auth()->user();
-
-        $user->tasks()
-            ->where('id', $id)
-            ->update(['title' => $validated['title']]);
+        $id->update(['title' => $validated['title']]);
 
         return redirect()->route('mytask.show');
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Task $id)
     {
-        $user = auth()->user();
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($id->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
 
-        $task = $user->tasks()->findOrFail($id);
-        $task->status = !$task->status;
-        $task->save();
+        $id->status = !$id->status;
+        $id->save();
 
         return redirect()->route('mytask.show');
     }
