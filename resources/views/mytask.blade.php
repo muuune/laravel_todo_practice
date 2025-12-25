@@ -48,7 +48,7 @@
         <div>
             <ul>
                 @foreach ($tasks as $task)
-                    <form action="{{ route('mytask.updateStatus', ['id' => $task->id]) }}" method="post">
+                    <form action="{{ route('mytask.updateStatus', ['task' => $task->id]) }}" method="post">
                         @csrf
                         <input type="checkbox"
                         name="status"
@@ -56,7 +56,7 @@
                         onChange="this.form.submit()">
                         {{ $task->title }}
                     </form>
-                    <form action="{{ route('mytask.edit', ['id' => $task->id]) }}" method="get">
+                    <form action="{{ route('mytask.edit', ['task' => $task->id]) }}" method="get">
                         @csrf
                         <button type="submit">編集</button>
                     </form> 

@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mytask', [MyTaskController::class, 'show'])->name('mytask.show');
     Route::post('/mytask/create', [MyTaskController::class, 'create'])->name('mytask.create');
     Route::post('/mytask/destroy', [MyTaskController::class, 'destroy'])->name('mytask.destroy');
-    Route::get('/mytask/{id}/edit', [MyTaskController::class, 'edit'])->name('mytask.edit');
-    Route::post('/mytask/{id}/update', [MyTaskController::class, 'update'])->name('mytask.update');
-    Route::post('/mytask/{id}/status', [MyTaskController::class, 'updateStatus'])->name('mytask.updateStatus');
+    Route::get('/mytask/{task}/edit', [MyTaskController::class, 'edit'])->name('mytask.edit');
+    Route::post('/mytask/{task}/update', [MyTaskController::class, 'update'])->name('mytask.update');
+    Route::post('/mytask/{task}/status', [MyTaskController::class, 'updateStatus'])->name('mytask.updateStatus');
 });
