@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>TODO - {{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,7 +12,18 @@
 
     </head>
     <body class="antialiased">
-        <h1>タスクアプリ</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>タスクアプリ</h1>
+            <div>
+                @auth
+                    <span>{{ auth()->user()->name }} さん</span>
+                    <form action="{{ route('logout') }}" method="post" style="display: inline;">
+                        @csrf
+                        <button type="submit">ログアウト</button>
+                    </form>
+                @endauth
+            </div>
+        </div>
         <form action="{{ route('mytask.show') }}" method="get">
             <select name="filter_status" onChange="this.form.submit()">
                 <option value="">全て</option>
@@ -37,7 +48,7 @@
         <div>
             <ul>
                 @foreach ($tasks as $task)
-                    <form action="{{ route('mytask.updateStatus', ['id' => $task->id]) }}" method="post">
+                    <form action="{{ route('mytask.updateStatus', ['task' => $task->id]) }}" method="post">
                         @csrf
                         <input type="checkbox"
                         name="status"
@@ -45,7 +56,7 @@
                         onChange="this.form.submit()">
                         {{ $task->title }}
                     </form>
-                    <form action="{{ route('mytask.edit', ['id' => $task->id]) }}" method="get">
+                    <form action="{{ route('mytask.edit', ['task' => $task->id]) }}" method="get">
                         @csrf
                         <button type="submit">編集</button>
                     </form> 

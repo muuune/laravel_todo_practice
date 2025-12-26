@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\MyTaskPostRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Task;
-use App\Models\User;
 
 class MyTaskController extends Controller
 {
     public function show(Request $request)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
         $query = $user->tasks(); 
 
         // 絞り込み（filter_statusが送られてきた場合）
@@ -56,8 +54,7 @@ class MyTaskController extends Controller
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $user->tasks()->create([
             'title' => $validated['title'],
@@ -68,46 +65,46 @@ class MyTaskController extends Controller
 
     public function destroy(Request $request)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        $user = auth()->user();
 
         $user->tasks()->where('id', $request->id)->delete();
 
         return redirect()->route('mytask.show');
     } 
 
-    public function edit($id)
+    public function edit(Task $task)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
-
-        $task = $user->tasks()->where('id', $id)->firstOrFail();
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
 
         return view('edit-mytask')->with('task', $task);
     }
     
-    public function update(MyTaskPostRequest $request, $id): RedirectResponse
+    public function update(MyTaskPostRequest $request, Task $task): RedirectResponse
     {  
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
+
         // 受信リクエストは正しかった
         // バリデーション済みデータの取得
         $validated = $request->validated();
 
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
-
-        $user->tasks()
-            ->where('id', $id)
-            ->update(['title' => $validated['title']]);
+        $task->update(['title' => $validated['title']]);
 
         return redirect()->route('mytask.show');
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Task $task)
     {
-        // TODO: ログイン機能を実装した後に変更する
-        $user = User::findOrFail(1);
+        // ログインユーザーがこのタスクを所有しているか確認
+        if ($task->user_id !== auth()->id()) {
+            abort(403, 'このタスクにアクセスする権限がありません。');
+        }
 
-        $task = $user->tasks()->findOrFail($id);
         $task->status = !$task->status;
         $task->save();
 
